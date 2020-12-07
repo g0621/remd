@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recents-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: recents
+  template:
+    metadata:
+      labels:
+        app: recents
+    spec:
+      containers:
+        - name: recents
+          image: gyan0621/recents
+          env:
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: remd
+            - name: REDIS_HOST
+              value: remd-redis-srv
+            - name: REDIS_PORT
+              value: '6379'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: recents-srv
+spec:
+  selector:
+    app: recents
+  ports:
+    - name: recents
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

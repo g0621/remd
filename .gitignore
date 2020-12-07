@@ -1,0 +1,8 @@
+**/node_modules
+**/.git
+**/.next
+.idea
+.vscode
+**/.idea
+**/.vscode
+**/.DS_Store
